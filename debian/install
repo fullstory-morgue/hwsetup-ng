@@ -1,0 +1,4 @@
+hwsetup				sbin/
+hwsetup-xserver-cached.bash	usr/share/hwsetup-ng/
+hwsetup-xserver.bash		usr/share/hwsetup-ng/
+hwsetup-xserver.pl		usr/share/hwsetup-ng/

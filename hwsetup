@@ -1,0 +1,71 @@
+#!/bin/bash
+
+PATH="/usr/share/hwsetup-ng:$PATH"
+
+usage () {
+cat <<EOT
+HWSETUP NG - bash emulation of former hwsetup for combined usage with udev
+(C) 2005 Joerg Schirottke <master@kanotix.com>
+Usage: $(basename $0) [options]
+ 
+available options:
+ 
+	-v	verbose mode
+	-p	progress bar 
+EOT
+}
+
+unset VERBOSE PROGRESS
+
+while (($#)); do
+	case $1 in
+ 		-v)	VERBOSE=1
+			shift
+			;;
+ 
+		-p)	PROGRESS=1
+			shift
+			;;
+
+		*)	usage
+			exit 1
+	esac
+done
+
+BAR="\33[42;32m[[[[[\33[0;0m"
+
+show_progress () {
+[ "$PROGRESS" ] && echo -en "$BAR" 1>&2
+}
+
+[ "$PROGRESS" ] && echo -n "Autoconfiguring devices... " 1>&2
+
+SYSCONFIG="/etc/sysconfig"
+
+mkdir -p "$SYSCONFIG"
+rm -f "$SYSCONFIG/{mouse,netcard,sound,xserver,knoppix}"
+
+# xserver detection - external script
+
+hwsetup-xserver > "$SYSCONFIG/xserver"
+source "$SYSCONFIG/xserver"
+show_progress
+
+# sound - parsed from ALSA driver
+
+SOUND_FULLNAME="$(echo $(head -1 /proc/asound/cards|cut -d: -f2-))"
+SOUND_DRIVER="$(head -1 /proc/asound/modules|cut -d' ' -f2)"
+if [ "$SOUND_FULLNAME" ]; then
+cat <<EOT > "$SYSCONFIG/sound"
+FULLNAME="$SOUND_FULLNAME"
+DRIVER="$SOUND_DRIVER"
+EOT
+fi
+show_progress
+
+# finished
+
+[ "$PROGRESS" ] && echo " Done." 1>&2
+
+exit 0
+

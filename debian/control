@@ -1,0 +1,15 @@
+Source: hwsetup-ng
+Section: utils
+Priority: extra
+Maintainer: Stefan Lippers-Hollmann <s.l-h@gmx.de>
+Build-Depends-Indep: cdbs (>= 0.4.23-1.1), build-essential, debhelper (>= 4.1.0)
+Standards-Version: 3.6.2
+
+Package: hwsetup-ng
+Architecture: all
+Depends: gawk, perl, hwdata-kanotix (>= 0.169)
+Provides: hwsetup-kanotix
+Replaces: hwsetup-kanotix
+Conflicts: hwsetup-kanotix
+Description: udev based hwsetup replacement
+ Bash emulation of the former hwsetup for combined usage with udev.
