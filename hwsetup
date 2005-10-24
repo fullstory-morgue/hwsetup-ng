@@ -20,24 +20,17 @@ unset VERBOSE PROGRESS NOSERIAL DEBUG
 while (($#)); do
 	case $1 in
  		-v)	VERBOSE=1
-			shift
 			;;
- 
-		-p)	PROGRESS=1
-			shift
+ 		-p)	PROGRESS=1
 			;;
-
 		-m)	NOSERIAL=1
-			shift
 			;;
-
 		-n)	DEBUG=1
-			shift
 			;;
-
 		*)	usage
 			exit 1
 	esac
+	shift
 done
 
 [ "$DEBUG" ] && unset PROGRESS
@@ -52,8 +45,10 @@ show_progress () {
 
 SYSCONFIG=/etc/sysconfig
 
+[ "$DEBUG" ] || (
 mkdir -p $SYSCONFIG
 rm -f $SYSCONFIG/{floppy,mouse,netcard,sound,xserver,knoppix}
+)
 
 # xserver detection - external script
 
