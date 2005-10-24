@@ -9,7 +9,7 @@ while read id driver; do
  ((count++))
 done < <(cut -f2 -d: /usr/share/hwdata/videoaliases)
 ((count--))
-SYS=$(cut -f2 -d: /sys/devices/pci*/*/*/modalias)
+SYS=$(cut -f2 -d: /sys/devices/pci*/{,*/}*/modalias 2>&-)
 unset found 
 for id in $(seq 0 $count); do
  for sysid in $SYS; do
@@ -26,7 +26,7 @@ else
  echo XMODULE=\"vesa\"
  VGA=$(lspci|grep VGA|cut -f4- -d:)
  if [ "$VGA" ]; then
-  echo XDESC=\"$VGA\"
+  echo XDESC=\"$(echo $VGA)\"
  else 
   echo XDESC=\"Generic VGA card\"
  fi

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-PATH="/usr/share/hwsetup-ng:$PATH"
-
 usage () {
 cat <<EOT
 HWSETUP NG - bash emulation of former hwsetup for combined usage with udev
@@ -11,11 +9,13 @@ Usage: $(basename $0) [options]
 available options:
  
 	-v	verbose mode
-	-p	progress bar 
+	-p	progress bar
+	-m	skip serial mouse check
+	-n	debug mode (no progress bar, always verbose)
 EOT
 }
 
-unset VERBOSE PROGRESS
+unset VERBOSE PROGRESS NOSERIAL DEBUG
 
 while (($#)); do
 	case $1 in
@@ -27,12 +27,22 @@ while (($#)); do
 			shift
 			;;
 
+		-m)	NOSERIAL=1
+			shift
+			;;
+
+		-n)	DEBUG=1
+			shift
+			;;
+
 		*)	usage
 			exit 1
 	esac
 done
 
-BAR="\33[42;32m[[[[[\33[0;0m"
+[ "$DEBUG" ] && unset PROGRESS
+
+BAR="\33[42;32m***\33[0;0m"
 
 show_progress () {
 [ "$PROGRESS" ] && echo -en "$BAR" 1>&2
@@ -40,32 +50,153 @@ show_progress () {
 
 [ "$PROGRESS" ] && echo -n "Autoconfiguring devices... " 1>&2
 
-SYSCONFIG="/etc/sysconfig"
+SYSCONFIG=/etc/sysconfig
 
-mkdir -p "$SYSCONFIG"
-rm -f "$SYSCONFIG/{mouse,netcard,sound,xserver,knoppix}"
+mkdir -p $SYSCONFIG
+rm -f $SYSCONFIG/{floppy,mouse,netcard,sound,xserver,knoppix}
 
 # xserver detection - external script
 
-hwsetup-xserver > "$SYSCONFIG/xserver"
-source "$SYSCONFIG/xserver"
+if [ "$DEBUG" ]; then
+	hwsetup-xserver
+else
+	hwsetup-xserver > $SYSCONFIG/xserver
+	. $SYSCONFIG/xserver
+fi
+
 show_progress
 
 # sound - parsed from ALSA driver
 
-SOUND_FULLNAME="$(echo $(head -1 /proc/asound/cards|cut -d: -f2-))"
-SOUND_DRIVER="$(head -1 /proc/asound/modules|cut -d' ' -f2)"
+SOUND_FULLNAME="$(echo $(head -1 /proc/asound/cards 2>/dev/null|cut -d: -f2-))"
+SOUND_DRIVER="$(head -1 /proc/asound/modules 2>/dev/null|cut -d' ' -f2)"
+
 if [ "$SOUND_FULLNAME" ]; then
-cat <<EOT > "$SYSCONFIG/sound"
+	[ "$DEBUG" ] || cat <<EOT > $SYSCONFIG/sound
 FULLNAME="$SOUND_FULLNAME"
 DRIVER="$SOUND_DRIVER"
 EOT
 fi
+
 show_progress
 
-# finished
+# mouse detection - serial mouse via hwinfo (SuSE)
+
+unset SERIAL PS2 USB MOUSE_DEVICE MOUSE_FULLNAME
+
+if [ -x /usr/sbin/hwinfo -a ! "$NOSERIAL" ]; then
+	SERIAL=$(/usr/sbin/hwinfo --mouse --short|grep /dev/tty|head -1)
+fi
+
+if [ "$SERIAL" ]; then
+	MOUSETYPE="ms"
+	XMOUSETYPE="Microsoft"
+	MOUSE_FULLNAME="$(echo $SERIAL|cut -d' ' -f2-)"
+	MOUSE_DEVICE="$(echo $SERIAL|cut -d' ' -f1)"
+fi
+
+PS2=$(grep Handlers=mouse -B2 /proc/bus/input/devices|grep Phys=isa -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')
+if [ "$PS2" -a ! "$SERIAL" ]; then
+	MOUSETYPE="ps2"
+	XMOUSETYPE="PS/2"
+	MOUSE_FULLNAME="$PS2"
+	MOUSE_DEVICE="/dev/psaux"
+fi
+
+USB=$(grep Handlers=mouse -B2 /proc/bus/input/devices|grep Phys=usb -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')
+[ ! "$USB" ] && USB=$(grep Handlers=.*mouse -B2 /proc/bus/input/devices|grep Phys=usb -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')
+
+if [ "$USB" -a ! "$PS2" -a ! "$SERIAL" ]; then
+	MOUSETYPE="imps2"
+	XMOUSETYPE="IMPS/2"
+	MOUSE_FULLNAME="$USB"
+	MOUSE_DEVICE="/dev/input/mice"
+fi
+
+if [ "$MOUSE_DEVICE" -a ! "$DEBUG" ]; then
+	rm -f /dev/mouse
+	ln -s "$MOUSE_DEVICE" /dev/mouse
+fi
+
+if [ "$MOUSE_FULLNAME" -a "$MOUSE_DEVICE" -a ! "$DEBUG" ]; then
+	cat <<EOT > $SYSCONFIG/mouse
+MOUSETYPE="$MOUSETYPE"
+XMOUSETYPE="$XMOUSETYPE"
+FULLNAME="$MOUSE_FULLNAME"
+DEVICE="$MOUSE_DEVICE"
+EOT
+fi
+
+show_progress
+
+# floppy detection
+
+unset FLOPPY_FULLNAME FLOPPY_DEVICE FLOPPY_DRIVER
+
+if [ -d /sys/block/fd0 ]; then
+FLOPPY_FULLNAME="Generic floppy drive"
+FLOPPY_DEVICE="/dev/fd0"
+FLOPPY_DRIVER="unknown"
+fi
+
+if [ "$FLOPPY_FULLNAME" -a "$FLOPPY_DEVICE" -a ! "$DEBUG" ]; then       
+	cat <<EOT > $SYSCONFIG/floppy
+FULLNAME="$FLOPPY_FULLNAME"
+DEVICE="$FLOPPY_DEVICE"
+DRIVER="$FLOPPY_DRIVER"
+EOT
+fi
+
+show_progress
+
+# skipping netcard detection - already done by udev
 
 [ "$PROGRESS" ] && echo " Done." 1>&2
 
-exit 0
+# combine output
 
+echo_var () {
+[ "${!1}" ] && echo $1=\"${!1}\"
+}
+
+[ "$DEBUG" ] || (
+echo_var MOUSE_FULLNAME
+echo_var MOUSE_DEVICE
+echo_var SOUND_FULLNAME
+echo_var SOUND_DRIVER
+echo_var XSERVER
+echo_var XMODULE
+echo_var XDESC
+echo_var FLOPPY_FULLNAME
+echo_var FLOPPY_DEVICE
+echo_var FLOPPY_DRIVER
+) > $SYSCONFIG/knoppix
+
+[ "$VERBOSE" -a ! "$DEBUG" ] && (
+echo_var MOUSETYPE
+echo_var XMOUSETYPE
+echo_var MOUSE_FULLNAME
+echo_var MOUSE_DEVICE
+echo_var SOUND_FULLNAME
+echo_var SOUND_DRIVER
+echo_var XSERVER
+echo_var XMODULE
+echo_var XDESC
+echo_var FLOPPY_FULLNAME
+echo_var FLOPPY_DEVICE
+echo_var FLOPPY_DRIVER
+)
+
+[ "$DEBUG" ] && (
+echo_var MOUSETYPE
+echo_var XMOUSETYPE
+echo_var MOUSE_FULLNAME
+echo_var MOUSE_DEVICE
+echo_var SOUND_FULLNAME
+echo_var SOUND_DRIVER
+echo_var FLOPPY_FULLNAME
+echo_var FLOPPY_DEVICE
+echo_var FLOPPY_DRIVER
+)
+
+# finished

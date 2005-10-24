@@ -1,3 +1,9 @@
+hwsetup-ng (0.1.1) unstable; urgency=low
+
+  * new upstream version.
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 24 Oct 2005 02:58:14 +0200
+
 hwsetup-ng (0.1) unstable; urgency=low
 
   * Initial release Closes.
