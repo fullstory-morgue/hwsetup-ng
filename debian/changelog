@@ -1,8 +1,8 @@
-hwsetup-ng (0.1.3) UNRELEASED; urgency=low
+hwsetup-ng (0.1.3) unreleased; urgency=low
 
-  * NOT RELEASED YET
+  * re- add missing path.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 24 Oct 2005 03:20:59 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 24 Oct 2005 11:59:43 +0200
 
 hwsetup-ng (0.1.2) unstable; urgency=low
 
