@@ -197,3 +197,5 @@ echo_var FLOPPY_DRIVER
 )
 
 # finished
+
+exit 0
