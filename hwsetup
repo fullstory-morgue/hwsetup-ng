@@ -66,7 +66,7 @@ show_progress
 # sound - parsed from ALSA driver
 
 SOUND_FULLNAME="$(echo $(head -1 /proc/asound/cards 2>/dev/null|cut -d: -f2-))"
-SOUND_DRIVER="$(head -1 /proc/asound/modules 2>/dev/null|cut -d' ' -f2)"
+SOUND_DRIVER="$(echo $(head -1 /proc/asound/modules 2>/dev/null)|cut -d' ' -f2)"
 
 if [ "$SOUND_FULLNAME" ]; then
 	[ "$DEBUG" ] || cat <<EOT > $SYSCONFIG/sound
@@ -92,7 +92,7 @@ if [ "$SERIAL" ]; then
 	MOUSE_DEVICE="$(echo $SERIAL|cut -d' ' -f1)"
 fi
 
-PS2=$(grep Handlers=mouse -B2 /proc/bus/input/devices|grep Phys=isa -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')
+PS2=$(grep -v ^S: /proc/bus/input/devices|grep Handlers=mouse -B2|grep Phys=isa -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')
 if [ "$PS2" -a ! "$SERIAL" ]; then
 	MOUSETYPE="ps2"
 	XMOUSETYPE="PS/2"
@@ -100,8 +100,8 @@ if [ "$PS2" -a ! "$SERIAL" ]; then
 	MOUSE_DEVICE="/dev/psaux"
 fi
 
-USB=$(grep Handlers=mouse -B2 /proc/bus/input/devices|grep Phys=usb -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')
-[ ! "$USB" ] && USB=$(grep Handlers=.*mouse -B2 /proc/bus/input/devices|grep Phys=usb -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')
+USB=$(grep -v ^S: /proc/bus/input/devices|grep Handlers=mouse -B2|grep Phys=usb -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')
+[ ! "$USB" ] && USB=$(grep -v ^S: /proc/bus/input/devices|grep Handlers=.*mouse -B2|grep Phys=usb -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')
 
 if [ "$USB" -a ! "$PS2" -a ! "$SERIAL" ]; then
 	MOUSETYPE="imps2"
