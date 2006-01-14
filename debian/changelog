@@ -1,8 +1,12 @@
 hwsetup-ng (0.1.5) unstable; urgency=low
 
+  [ Joerg Schirottke ]
   * Compatible with kernel 2.6.15 now.
 
- -- Joerg Schirottke <master@kanotix.com>  Fri, 13 Jan 2006 17:29:27 +0100
+  [ Stefan Lippers-Hollmann ]
+  * remove cdbs auto-update tool.
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sat, 14 Jan 2006 01:49:31 +0100
 
 hwsetup-ng (0.1.4) unreleased; urgency=low
 
