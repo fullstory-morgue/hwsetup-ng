@@ -1,3 +1,9 @@
+hwsetup-ng (0.1.7) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sat,  8 Jul 2006 02:18:15 +0200
+
 hwsetup-ng (0.1.6) unstable; urgency=low
 
   * Changed xserver detection to use discover pci.lst.
