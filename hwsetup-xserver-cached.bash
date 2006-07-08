@@ -21,10 +21,10 @@ done
 echo XSERVER=\"$([ -x /usr/X11R6/bin/Xorg ] && echo Xorg || echo XFree86)\"
 if [ "$found" ]; then
  echo XMODULE=\"${VIDEO_DRIVER[$found]}\"
- echo XDESC=\"$(echo $(lspci -d $(echo $sysid|sed 's/sv.*//;s/v0000//;s/d0000/:/')|cut -f4- -d:))\"
+ echo XDESC=\"$(echo $(lspci -d $(echo $sysid|sed 's/sv.*//;s/v0000//;s/d0000/:/')|sed 's/.*://'))\"
 else
  echo XMODULE=\"vesa\"
- VGA=$(lspci|grep VGA|cut -f4- -d:)
+ VGA=$(lspci|grep VGA|sed 's/.*://')
  if [ "$VGA" ]; then
   echo XDESC=\"$(echo $VGA)\"
  else 
