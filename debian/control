@@ -7,9 +7,10 @@ Standards-Version: 3.6.2
 
 Package: hwsetup-ng
 Architecture: all
-Depends: gawk, perl, hwdata-kanotix (>= 0.169), discover1-data
+Depends: gawk, perl, discover1-data
 Provides: hwsetup-kanotix
 Replaces: hwsetup-kanotix
+Suggests: hwdata-kanotix (>= 0.169)
 Conflicts: hwsetup-kanotix
 Description: udev based hwsetup replacement
  Bash emulation of the former hwsetup for combined usage with udev.
