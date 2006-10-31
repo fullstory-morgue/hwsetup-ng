@@ -1,8 +1,9 @@
 hwsetup-ng (0.1.8) UNRELEASED; urgency=low
 
   * NOT RELEASED YET
+  * fix lintian errors.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 18 Sep 2006 01:20:16 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue, 31 Oct 2006 23:58:45 +0100
 
 hwsetup-ng (0.1.7) unstable; urgency=low
 
