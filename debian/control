@@ -10,7 +10,6 @@ Architecture: all
 Depends: gawk, perl, discover1-data
 Provides: hwsetup-kanotix
 Replaces: hwsetup-kanotix
-Suggests: hwdata-kanotix (>= 0.169)
-Conflicts: hwsetup-kanotix
+Conflicts: hwsetup-kanotix, hwdata-kanotix
 Description: udev based hwsetup replacement
  Bash emulation of the former hwsetup for combined usage with udev.

@@ -16,7 +16,7 @@ while read id driver; do
 		esac
 	done
 	[ "$found" ] && break
-done < <(awk -F'[\t()]' '/Server:XFree86/ && length($2)==8 {print "v0000" toupper(substr($2,0,4)) "d0000" toupper(substr($2,5,4)) "sv*sd*bc*sc*i* "$5}' /lib/discover/pci.lst)
+done < <(gawk -F'[\t()]' '/Server:XFree86/ && length($2)==8 {print "v0000" toupper(substr($2,0,4)) "d0000" toupper(substr($2,5,4)) "sv*sd*bc*sc*i* "$5}' /lib/discover/pci.lst)
 
 echo "XSERVER=\"Xorg\""
 
