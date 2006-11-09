@@ -1,9 +1,11 @@
-hwsetup-ng (0.1.8) UNRELEASED; urgency=low
+hwsetup-ng (0.1.8) unstable; urgency=low
 
   * NOT RELEASED YET
   * fix lintian errors.
+  * fix bashisms.
+  * re- indent.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue, 31 Oct 2006 23:58:45 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu,  9 Nov 2006 20:15:01 +0100
 
 hwsetup-ng (0.1.7) unstable; urgency=low
 
