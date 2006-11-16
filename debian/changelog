@@ -1,4 +1,4 @@
-hwsetup-ng (0.1.9) unstable; urgency=low
+hwsetup-ng (0.2.0) unstable; urgency=low
 
   * add new X detection written by locsmif.
 
