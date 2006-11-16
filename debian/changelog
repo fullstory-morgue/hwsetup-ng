@@ -1,3 +1,9 @@
+hwsetup-ng (0.2.1) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 16 Nov 2006 21:08:13 +0100
+
 hwsetup-ng (0.2.0) unstable; urgency=low
 
   * add new X detection written by locsmif.
