@@ -1,8 +1,8 @@
-hwsetup-ng (0.2.1) UNRELEASED; urgency=low
+hwsetup-ng (0.2.1) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * fix detection.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 16 Nov 2006 21:08:13 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 16 Nov 2006 23:45:45 +0100
 
 hwsetup-ng (0.2.0) unstable; urgency=low
 
