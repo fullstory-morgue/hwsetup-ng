@@ -1,2 +1,2 @@
 hwsetup				sbin/
-hwsetup-xserver-discover.bash	usr/share/hwsetup-ng/
+hwsetup-xserver-discover.pl	usr/share/hwsetup-ng/
