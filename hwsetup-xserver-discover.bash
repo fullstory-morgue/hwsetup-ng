@@ -3,12 +3,12 @@
 # (C) 2005-2006 Joerg Schirottke <master@kanotix.com>
 # (C) 2006 Stefan Lippers-Hollmann <s.l-h@gmx.de>
 
-SYS="$(cut -f2 -d: /sys/devices/pci*/{,*/}*/modalias 2>&-)"
+SYS="$(cut -f2 -d: /sys/devices/pci*/{,*/}*/modalias 2>/dev/null|grep 03sc00)"
 unset found found_driver
 while read id driver; do
 	for sysid in $SYS; do
 		case "$sysid" in
-			"$id")
+			$id)
 				found="$id"
 				found_driver="$driver"
 				break
@@ -24,7 +24,11 @@ if [ "$found" ]; then
 	echo "XMODULE=\"$found_driver\""
 	echo "XDESC=\"$(echo $(lspci -d $(echo $sysid|sed 's/sv.*//;s/v0000//;s/d0000/:/')|sed 's/.*://'))\""
 else
-	echo "XMODULE=\"vesa\""
+	VENDOR=$(echo $sysid|sed -r 's/^v0000(\w\w\w\w).*/\1/'|gawk '{print tolower($1)}')
+	DRIVER=$(sed -n '/^'$VENDOR'/,/^[0-9]/ s/\tffffffff\t.*(\([^)]*\)).*$/\1/p' /lib/discover/pci.lst)
+	[ -z "$DRIVER" ] && DRIVER=vesa
+
+	echo "XMODULE=\"$DRIVER\""
 	VGA="$(lspci|grep VGA|sed 's/.*://')"
 	if [ "$VGA" ]; then
 		echo "XDESC=\"$(echo $VGA)\""
@@ -32,4 +36,3 @@ else
 		echo "XDESC=\"Generic VGA card\""
 	fi
 fi
-
