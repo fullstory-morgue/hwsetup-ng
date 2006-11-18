@@ -1,5 +1,6 @@
-hwsetup-ng (0.2.2) unstable; urgency=low
+hwsetup-ng (0.2.2) UNRELEASED; urgency=low
 
+  * NOT RELEASED YET
   * optimized bash variant.
   * added sh (POSIX) variant.
 
