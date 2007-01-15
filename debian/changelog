@@ -1,8 +1,8 @@
-hwsetup-ng (0.2.3) UNRELEASED; urgency=low
+hwsetup-ng (0.2.3) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * remove bogus progress bar.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Tue,  5 Dec 2006 15:21:21 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 15 Jan 2007 22:32:17 +0100
 
 hwsetup-ng (0.2.2) unstable; urgency=low
 

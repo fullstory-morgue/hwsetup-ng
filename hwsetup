@@ -11,20 +11,17 @@ Usage: $(basename $0) [options]
 available options:
  
 	-v	verbose mode
-	-p	progress bar
 	-m	skip serial mouse check
-	-n	debug mode (no progress bar, always verbose)
+	-n	debug mode (always verbose)
 EOT
 }
 
 PATH="/usr/share/hwsetup-ng:$PATH"
 
-unset VERBOSE PROGRESS NOSERIAL DEBUG
+unset VERBOSE NOSERIAL DEBUG
 while (($#)); do
 	case $1 in
  		-v)	VERBOSE=1
-			;;
- 		-p)	PROGRESS=1
 			;;
 		-m)	NOSERIAL=1
 			;;
@@ -35,16 +32,6 @@ while (($#)); do
 	esac
 	shift
 done
-
-[ "$DEBUG" ] && unset PROGRESS
-
-BAR="\33[42;32m   \33[0;0m"
-
-show_progress () {
-	[ "$PROGRESS" ] && echo -en "$BAR" 1>&2
-}
-
-[ "$PROGRESS" ] && echo -n "Autoconfiguring devices... " 1>&2
 
 SYSCONFIG="/etc/sysconfig"
 
@@ -61,8 +48,6 @@ else
 	source "$SYSCONFIG/xserver"
 fi
 
-show_progress
-
 # sound - parsed from ALSA driver
 SOUND_FULLNAME="$(echo $(head -1 /proc/asound/cards 2>/dev/null|cut -d: -f2-))"
 SOUND_DRIVER="$(echo $(head -1 /proc/asound/modules 2>/dev/null)|cut -d' ' -f2)"
@@ -73,8 +58,6 @@ FULLNAME="$SOUND_FULLNAME"
 DRIVER="$SOUND_DRIVER"
 EOT
 fi
-
-show_progress
 
 # mouse detection - serial mouse via hwinfo (SuSE)
 unset SERIAL PS2 USB MOUSE_DEVICE MOUSE_FULLNAME
@@ -122,8 +105,6 @@ DEVICE="$MOUSE_DEVICE"
 EOT
 fi
 
-show_progress
-
 # floppy detection
 unset FLOPPY_FULLNAME FLOPPY_DEVICE FLOPPY_DRIVER
 
@@ -140,11 +121,6 @@ DEVICE="$FLOPPY_DEVICE"
 DRIVER="$FLOPPY_DRIVER"
 EOT
 fi
-
-show_progress
-
-# skipping netcard detection - already done by udev
-[ "$PROGRESS" ] && echo " Done." 1>&2
 
 # combine output
 echo_var () {
