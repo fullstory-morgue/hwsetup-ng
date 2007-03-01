@@ -1,8 +1,9 @@
-hwsetup-ng (0.2.4) UNRELEASED; urgency=low
+hwsetup-ng (0.2.4) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * hwsetup-kanotix, hwdata-kanotix were never in sidux or debian, don't
+    conflict with it.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 15 Jan 2007 22:34:13 +0100
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu,  1 Mar 2007 17:05:35 +0100
 
 hwsetup-ng (0.2.3) unstable; urgency=low
 
