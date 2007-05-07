@@ -18,12 +18,10 @@ EOT
 
 PATH="/usr/share/hwsetup-ng:$PATH"
 
-unset VERBOSE NOSERIAL DEBUG
+unset VERBOSE DEBUG
 while (($#)); do
 	case $1 in
  		-v)	VERBOSE=1
-			;;
-		-m)	NOSERIAL=1
 			;;
 		-n)	DEBUG=1
 			;;
@@ -62,7 +60,7 @@ fi
 # mouse detection - serial mouse via hwinfo (SuSE)
 unset SERIAL PS2 USB MOUSE_DEVICE MOUSE_FULLNAME
 
-if [ -x /usr/sbin/hwinfo -a ! "$NOSERIAL" ]; then
+if [ -x /usr/sbin/hwinfo ]; then
 	SERIAL=$(/usr/sbin/hwinfo --mouse --short|grep /dev/tty|head -1)
 fi
 

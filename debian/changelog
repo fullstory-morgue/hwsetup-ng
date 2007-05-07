@@ -1,3 +1,9 @@
+hwsetup-ng (0.2.5) unstable; urgency=low
+
+  * Remove NOSERIAL variable, noserial is no longer valid cheatcode.
+
+ -- Kel Modderman <kel@otaku42.de>  Mon, 07 May 2007 22:31:13 +1000
+
 hwsetup-ng (0.2.4) unstable; urgency=low
 
   * hwsetup-kanotix, hwdata-kanotix were never in sidux or debian, don't
