@@ -1,3 +1,9 @@
+hwsetup-ng (0.2.6) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Mon, 07 May 2007 14:46:28 +0200
+
 hwsetup-ng (0.2.5) unstable; urgency=low
 
   * Remove NOSERIAL variable, noserial is no longer valid cheatcode.
