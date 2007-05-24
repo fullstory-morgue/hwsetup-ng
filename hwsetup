@@ -35,7 +35,7 @@ SYSCONFIG="/etc/sysconfig"
 
 [ "$DEBUG" ] || (
 	mkdir -p "$SYSCONFIG"
-	rm -f "$SYSCONFIG/{floppy,mouse,netcard,sound,xserver,knoppix}"
+	rm -f "$SYSCONFIG/{mouse,netcard,sound,xserver,knoppix}"
 )
 
 # xserver detection - external script
@@ -103,23 +103,6 @@ DEVICE="$MOUSE_DEVICE"
 EOT
 fi
 
-# floppy detection
-unset FLOPPY_FULLNAME FLOPPY_DEVICE FLOPPY_DRIVER
-
-if [ -d /sys/block/fd0 ]; then
-	FLOPPY_FULLNAME="Generic floppy drive"
-	FLOPPY_DEVICE="/dev/fd0"
-	FLOPPY_DRIVER="unknown"
-fi
-
-if [ "$FLOPPY_FULLNAME" -a "$FLOPPY_DEVICE" -a ! "$DEBUG" ]; then       
-	cat <<EOT > $SYSCONFIG/floppy
-FULLNAME="$FLOPPY_FULLNAME"
-DEVICE="$FLOPPY_DEVICE"
-DRIVER="$FLOPPY_DRIVER"
-EOT
-fi
-
 # combine output
 echo_var () {
 	[ "${!1}" ] && echo "$1=\"${!1}\""
@@ -133,9 +116,6 @@ echo_var () {
 	echo_var XSERVER
 	echo_var XMODULE
 	echo_var XDESC
-	echo_var FLOPPY_FULLNAME
-	echo_var FLOPPY_DEVICE
-	echo_var FLOPPY_DRIVER
 ) > "$SYSCONFIG/knoppix"
 
 [ "$VERBOSE" -a ! "$DEBUG" ] && (
@@ -148,9 +128,6 @@ echo_var () {
 	echo_var XSERVER
 	echo_var XMODULE
 	echo_var XDESC
-	echo_var FLOPPY_FULLNAME
-	echo_var FLOPPY_DEVICE
-	echo_var FLOPPY_DRIVER
 )
 
 [ "$DEBUG" ] && (
@@ -160,9 +137,6 @@ echo_var () {
 	echo_var MOUSE_DEVICE
 	echo_var SOUND_FULLNAME
 	echo_var SOUND_DRIVER
-	echo_var FLOPPY_FULLNAME
-	echo_var FLOPPY_DEVICE
-	echo_var FLOPPY_DRIVER
 )
 
 exit 0
