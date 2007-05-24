@@ -1,3 +1,9 @@
+hwsetup-ng (0.2.7) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 24 May 2007 23:11:42 +0200
+
 hwsetup-ng (0.2.6) unstable; urgency=low
 
   * remove /etc/sysconfig/floppy detection, it isn't parsed anywhere.
