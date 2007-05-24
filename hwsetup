@@ -35,7 +35,7 @@ SYSCONFIG="/etc/sysconfig"
 
 [ "$DEBUG" ] || (
 	mkdir -p "$SYSCONFIG"
-	rm -f "$SYSCONFIG/{mouse,netcard,sound,xserver,knoppix}"
+	rm -f "$SYSCONFIG/{mouse,netcard,xserver,knoppix}"
 )
 
 # xserver detection - external script
@@ -44,17 +44,6 @@ if [ "$DEBUG" ]; then
 else
 	hwsetup-xserver > "$SYSCONFIG/xserver"
 	source "$SYSCONFIG/xserver"
-fi
-
-# sound - parsed from ALSA driver
-SOUND_FULLNAME="$(echo $(head -1 /proc/asound/cards 2>/dev/null|cut -d: -f2-))"
-SOUND_DRIVER="$(echo $(head -1 /proc/asound/modules 2>/dev/null)|cut -d' ' -f2)"
-
-if [ "$SOUND_FULLNAME" ]; then
-	[ "$DEBUG" ] || cat <<EOT > "$SYSCONFIG/sound"
-FULLNAME="$SOUND_FULLNAME"
-DRIVER="$SOUND_DRIVER"
-EOT
 fi
 
 # mouse detection - serial mouse via hwinfo (SuSE)
@@ -111,8 +100,6 @@ echo_var () {
 [ "$DEBUG" ] || (
 	echo_var MOUSE_FULLNAME
 	echo_var MOUSE_DEVICE
-	echo_var SOUND_FULLNAME
-	echo_var SOUND_DRIVER
 	echo_var XSERVER
 	echo_var XMODULE
 	echo_var XDESC
@@ -123,8 +110,6 @@ echo_var () {
 	echo_var XMOUSETYPE
 	echo_var MOUSE_FULLNAME
 	echo_var MOUSE_DEVICE
-	echo_var SOUND_FULLNAME
-	echo_var SOUND_DRIVER
 	echo_var XSERVER
 	echo_var XMODULE
 	echo_var XDESC
@@ -135,8 +120,6 @@ echo_var () {
 	echo_var XMOUSETYPE
 	echo_var MOUSE_FULLNAME
 	echo_var MOUSE_DEVICE
-	echo_var SOUND_FULLNAME
-	echo_var SOUND_DRIVER
 )
 
 exit 0
