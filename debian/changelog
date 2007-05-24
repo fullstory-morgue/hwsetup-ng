@@ -1,10 +1,12 @@
-hwsetup-ng (0.2.6) UNRELEASED; urgency=low
+hwsetup-ng (0.2.6) unstable; urgency=low
 
-  * NOT RELEASED YET
   * remove /etc/sysconfig/floppy detection, it isn't parsed anywhere.
   * remove /etc/sysconfig/sound detection, it isn't parsed anywhere.
+  * centralize output to /etc/hwsetup.
+  * nuke /etc/sysconfig/ usage.
+  * dispose /etc/hwsetup on purge.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 24 May 2007 21:12:37 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 24 May 2007 22:31:56 +0200
 
 hwsetup-ng (0.2.5) unstable; urgency=low
 

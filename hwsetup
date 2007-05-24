@@ -1,11 +1,12 @@
 #!/bin/bash
 # (C) 2005 Jörg Schirottke <master@kanotix.com>
-# (C) 2006 Stefan Lippers-Hollmann <s.l-h@gmx.de>
+# (C) 2006-2007 Stefan Lippers-Hollmann <s.l-h@gmx.de>
 
 usage () {
 cat <<EOT
 HWSETUP NG - bash emulation of former hwsetup for combined usage with udev
 (C) 2005 Joerg Schirottke <master@kanotix.com>
+(C) 2006-2007 Stefan Lippers-Hollmann <s.l-h@gmx.de>
 Usage: $(basename $0) [options]
  
 available options:
@@ -14,6 +15,11 @@ available options:
 	-m	skip serial mouse check
 	-n	debug mode (always verbose)
 EOT
+}
+
+# combine output
+echo_var () {
+	[ "${!1}" ] && echo "$1=\"${!1}\""
 }
 
 PATH="/usr/share/hwsetup-ng:$PATH"
@@ -31,19 +37,18 @@ while (($#)); do
 	shift
 done
 
-SYSCONFIG="/etc/sysconfig"
+HWSETUP_MAIN="/etc/hwsetup"
 
 [ "$DEBUG" ] || (
-	mkdir -p "$SYSCONFIG"
-	rm -f "$SYSCONFIG/{mouse,netcard,xserver,knoppix}"
+	rm -f "$HWSETUP_MAIN"
 )
 
 # xserver detection - external script
 if [ "$DEBUG" ]; then
 	hwsetup-xserver
 else
-	hwsetup-xserver > "$SYSCONFIG/xserver"
-	source "$SYSCONFIG/xserver"
+	hwsetup-xserver > "$HWSETUP_MAIN"
+	. "$HWSETUP_MAIN"
 fi
 
 # mouse detection - serial mouse via hwinfo (SuSE)
@@ -54,16 +59,16 @@ if [ -x /usr/sbin/hwinfo ]; then
 fi
 
 if [ "$SERIAL" ]; then
-	MOUSETYPE="ms"
-	XMOUSETYPE="Microsoft"
+	MOUSE_MOUSETYPE="ms"
+	MOUSE_XMOUSETYPE="Microsoft"
 	MOUSE_FULLNAME="$(echo $SERIAL|cut -d' ' -f2-)"
 	MOUSE_DEVICE="$(echo $SERIAL|cut -d' ' -f1)"
 fi
 
 PS2="$(grep -v ^S: /proc/bus/input/devices|grep Handlers=mouse -B2|grep Phys=isa -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')"
 if [ "$PS2" -a ! "$SERIAL" ]; then
-	MOUSETYPE="ps2"
-	XMOUSETYPE="PS/2"
+	MOUSE_MOUSETYPE="ps2"
+	MOUSE_XMOUSETYPE="PS/2"
 	MOUSE_FULLNAME="$PS2"
 	MOUSE_DEVICE="/dev/psaux"
 fi
@@ -72,8 +77,8 @@ USB="$(grep -v ^S: /proc/bus/input/devices|grep Handlers=mouse -B2|grep Phys=usb
 [ ! "$USB" ] && USB="$(grep -v ^S: /proc/bus/input/devices|grep Handlers=.*mouse -B2|grep Phys=usb -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')"
 
 if [ "$USB" -a ! "$PS2" -a ! "$SERIAL" ]; then
-	MOUSETYPE="imps2"
-	XMOUSETYPE="IMPS/2"
+	MOUSE_MOUSETYPE="imps2"
+	MOUSE_XMOUSETYPE="IMPS/2"
 	MOUSE_FULLNAME="$USB"
 	MOUSE_DEVICE="/dev/input/mice"
 fi
@@ -83,31 +88,19 @@ if [ "$MOUSE_DEVICE" -a ! "$DEBUG" ]; then
 	ln -s "$MOUSE_DEVICE" /dev/mouse
 fi
 
-if [ "$MOUSE_FULLNAME" -a "$MOUSE_DEVICE" -a ! "$DEBUG" ]; then
-	cat <<EOT > $SYSCONFIG/mouse
-MOUSETYPE="$MOUSETYPE"
-XMOUSETYPE="$XMOUSETYPE"
-FULLNAME="$MOUSE_FULLNAME"
-DEVICE="$MOUSE_DEVICE"
-EOT
-fi
-
-# combine output
-echo_var () {
-	[ "${!1}" ] && echo "$1=\"${!1}\""
-}
-
 [ "$DEBUG" ] || (
 	echo_var MOUSE_FULLNAME
 	echo_var MOUSE_DEVICE
+	echo_var MOUSE_MOUSETYPE
+	echo_var MOUSE_XMOUSETYPE
 	echo_var XSERVER
 	echo_var XMODULE
 	echo_var XDESC
-) > "$SYSCONFIG/knoppix"
+) > "$HWSETUP_MAIN"
 
 [ "$VERBOSE" -a ! "$DEBUG" ] && (
-	echo_var MOUSETYPE
-	echo_var XMOUSETYPE
+	echo_var MOUSE_MOUSETYPE
+	echo_var MOUSE_XMOUSETYPE
 	echo_var MOUSE_FULLNAME
 	echo_var MOUSE_DEVICE
 	echo_var XSERVER
@@ -116,8 +109,8 @@ echo_var () {
 )
 
 [ "$DEBUG" ] && (
-	echo_var MOUSETYPE
-	echo_var XMOUSETYPE
+	echo_var MOUSE_MOUSETYPE
+	echo_var MOUSE_XMOUSETYPE
 	echo_var MOUSE_FULLNAME
 	echo_var MOUSE_DEVICE
 )
