@@ -7,6 +7,6 @@ Standards-Version: 3.7.2
 
 Package: hwsetup-ng
 Architecture: all
-Depends: gawk, perl, discover1-data
+Depends: gawk, perl, discover1-data, hwinfo
 Description: udev based hwsetup replacement
  Bash/ perl emulation of the former hwsetup for combined usage with udev.
