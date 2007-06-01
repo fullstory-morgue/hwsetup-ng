@@ -1,8 +1,8 @@
-hwsetup-ng (0.2.7) UNRELEASED; urgency=low
+hwsetup-ng (0.2.7) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * Add bluetooth detection here via hwinfo.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Thu, 24 May 2007 23:11:42 +0200
+ -- Kel Modderman <kel@otaku42.de>  Fri, 01 Jun 2007 11:18:25 +1000
 
 hwsetup-ng (0.2.6) unstable; urgency=low
 
