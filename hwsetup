@@ -52,12 +52,9 @@ fi
 
 # mouse detection - serial mouse via hwinfo (SuSE)
 unset SERIAL PS2 USB MOUSE_DEVICE MOUSE_FULLNAME
-# also detect Bluetooth via hwinfo
-unset BLUETOOTH
 
 if [ -x /usr/sbin/hwinfo ]; then
 	SERIAL=$(/usr/sbin/hwinfo --mouse --short | grep /dev/tty | head -1)
-	BLUETOOTH=$(/usr/sbin/hwinfo --bluetooth | awk '/Hardware Class:/{ print $NF; exit }')
 fi
 
 if [ "$SERIAL" ]; then
@@ -91,7 +88,6 @@ if [ "$MOUSE_DEVICE" -a ! "$DEBUG" ]; then
 fi
 
 [ "$DEBUG" ] || (
-	echo_var BLUETOOTH
 	echo_var MOUSE_FULLNAME
 	echo_var MOUSE_DEVICE
 	echo_var MOUSE_MOUSETYPE
@@ -102,7 +98,6 @@ fi
 ) > "$HWSETUP_MAIN"
 
 [ "$VERBOSE" -a ! "$DEBUG" ] && (
-	echo_var BLUETOOTH
 	echo_var MOUSE_MOUSETYPE
 	echo_var MOUSE_XMOUSETYPE
 	echo_var MOUSE_FULLNAME
