@@ -1,3 +1,9 @@
+hwsetup-ng (0.2.10) unstable; urgency=low
+
+  * upload to sidux.com.
+
+ -- Kel Modderman <kel@otaku42.de>  Sun, 03 Jun 2007 14:03:44 +0200
+
 hwsetup-ng (0.2.9) unstable; urgency=low
 
   * Remove bluetooth detection, and vow never to add anything to this script
