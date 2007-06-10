@@ -1,3 +1,9 @@
+hwsetup-ng (0.2.13) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 10 Jun 2007 15:30:38 +0200
+
 hwsetup-ng (0.2.12) unstable; urgency=low
 
   * simplify mouse detection, since Kernel 2.6 PS/2 and USB mice are handled
