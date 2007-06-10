@@ -1,4 +1,4 @@
-hwsetup-ng (0.2.11) UNRELEASED; urgency=low
+hwsetup-ng (0.2.11) unstable; urgency=low
 
   * Remove more /dev/mouse symlinkage, don't do that, we have udev now!
 
