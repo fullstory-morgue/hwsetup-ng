@@ -1,8 +1,9 @@
 hwsetup-ng (0.2.13) UNRELEASED; urgency=low
 
   * NOT RELEASED YET
+  * work on source comments.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 10 Jun 2007 15:30:38 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 10 Jun 2007 16:13:14 +0200
 
 hwsetup-ng (0.2.12) unstable; urgency=low
 
