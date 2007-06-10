@@ -1,3 +1,9 @@
+hwsetup-ng (0.2.12) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 10 Jun 2007 14:34:30 +0200
+
 hwsetup-ng (0.2.11) unstable; urgency=low
 
   * Remove more /dev/mouse symlinkage, don't do that, we have udev now!
