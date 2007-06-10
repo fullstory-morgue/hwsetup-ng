@@ -82,11 +82,6 @@ if [ "$USB" -a ! "$PS2" -a ! "$SERIAL" ]; then
 	MOUSE_DEVICE="/dev/input/mice"
 fi
 
-if [ "$MOUSE_DEVICE" -a ! "$DEBUG" ]; then
-	rm -f /dev/mouse
-	ln -s "$MOUSE_DEVICE" /dev/mouse
-fi
-
 [ "$DEBUG" ] || (
 	echo_var MOUSE_FULLNAME
 	echo_var MOUSE_DEVICE
