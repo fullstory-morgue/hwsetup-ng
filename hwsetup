@@ -53,8 +53,7 @@ fi
 # default to USB/ PS/2
 MOUSE_MOUSETYPE="imps2"
 MOUSE_XMOUSETYPE="IMPS/2"
-#MOUSE_FULLNAME="$(gawk -F ': ' '{ dev[$1] = $2; if ($2 ~ /Handlers=mouse/) { if (dev["P"] != "Phys=") { print gensub(/^Name="([^"]+)".*/,"\\1","g",dev["N"]) } } }' /proc/bus/input/devices)"
-#MOUSE_FULLNAME="$(mawk -F ': ' '{ dev[$1] = $2; if ($2 ~ /Handlers=mouse/) { if (dev["P"] != "Phys=") { gsub(/^Name="|"[^"]*$/,"",dev["N"]); print dev["N"] } } }' /proc/bus/input/devices)"
+#MOUSE_FULLNAME="$(awk -F ': ' '{ d[$1] = $2; if ($2 ~ /Handlers=mouse/ && d["P"] != "Phys=") { gsub(/^Name="|"[^"]*$/,"",d["N"]); print d["N"] } }' /proc/bus/input/devices)"
 MOUSE_FULLNAME="$(grep -v ^S\:\  /proc/bus/input/devices | grep -B 2 Handlers=.*mouse | grep -B 1 -e Phys\=usb -e Phys\=isa | tail -n 2 | head -n 1 | cut -d\" -f 2)"
 MOUSE_DEVICE="/dev/input/mice"
 
