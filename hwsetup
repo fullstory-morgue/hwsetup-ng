@@ -51,35 +51,17 @@ else
 fi
 
 # mouse detection - serial mouse via hwinfo (SuSE)
-unset SERIAL PS2 USB MOUSE_DEVICE MOUSE_FULLNAME
+MOUSE_MOUSETYPE="imps2"
+MOUSE_XMOUSETYPE="IMPS/2"
+MOUSE_FULLNAME="$(grep -v ^S\:\  /proc/bus/input/devices | grep -B 2 Handlers=.*mouse | grep -B 1 -e Phys\=usb -e Phys\=isa | tail -n 2 | head -n 1 | cut -d\" -f 2)"
+MOUSE_DEVICE="/dev/input/mice"
 
-if [ -x /usr/sbin/hwinfo ]; then
-	SERIAL=$(/usr/sbin/hwinfo --mouse --short | grep /dev/tty | head -1)
-fi
-
-if [ "$SERIAL" ]; then
+if [ -z "$MOUSE_FULLNAME" ] && [ -x /usr/sbin/hwinfo ]; then
+	SERIAL=$(/usr/sbin/hwinfo --mouse --short | grep \\/dev\\/tty | head -1)
 	MOUSE_MOUSETYPE="ms"
 	MOUSE_XMOUSETYPE="Microsoft"
-	MOUSE_FULLNAME="$(echo $SERIAL|cut -d' ' -f2-)"
-	MOUSE_DEVICE="$(echo $SERIAL|cut -d' ' -f1)"
-fi
-
-PS2="$(grep -v ^S: /proc/bus/input/devices|grep Handlers=mouse -B2|grep Phys=isa -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')"
-if [ "$PS2" -a ! "$SERIAL" ]; then
-	MOUSE_MOUSETYPE="ps2"
-	MOUSE_XMOUSETYPE="PS/2"
-	MOUSE_FULLNAME="$PS2"
-	MOUSE_DEVICE="/dev/psaux"
-fi
-
-USB="$(grep -v ^S: /proc/bus/input/devices|grep Handlers=mouse -B2|grep Phys=usb -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')"
-[ ! "$USB" ] && USB="$(grep -v ^S: /proc/bus/input/devices|grep Handlers=.*mouse -B2|grep Phys=usb -B1|tail -2|head -1|perl -pe '($_)=/Name="(.*)"/')"
-
-if [ "$USB" -a ! "$PS2" -a ! "$SERIAL" ]; then
-	MOUSE_MOUSETYPE="imps2"
-	MOUSE_XMOUSETYPE="IMPS/2"
-	MOUSE_FULLNAME="$USB"
-	MOUSE_DEVICE="/dev/input/mice"
+	MOUSE_FULLNAME="$(echo $SERIAL | cut -d' ' -f2-)"
+	MOUSE_DEVICE="$(echo $SERIAL   | cut -d' ' -f1)"
 fi
 
 [ "$DEBUG" ] || (

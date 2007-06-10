@@ -1,8 +1,11 @@
-hwsetup-ng (0.2.12) UNRELEASED; urgency=low
+hwsetup-ng (0.2.12) unstable; urgency=low
 
-  * NOT RELEASED YET
+  * simplify mouse detection, since Kernel 2.6 PS/2 and USB mice are handled
+    the same.
+  * only try to detect serial mice, if there are no USB oder PS/2 devices
+    present.
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 10 Jun 2007 14:34:30 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 10 Jun 2007 15:26:55 +0200
 
 hwsetup-ng (0.2.11) unstable; urgency=low
 
