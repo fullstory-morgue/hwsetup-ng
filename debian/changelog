@@ -1,9 +1,10 @@
-hwsetup-ng (0.2.13) UNRELEASED; urgency=low
+hwsetup-ng (0.2.13) ORPHANED; urgency=low
 
   * NOT RELEASED YET
   * work on source comments.
+  * ORPHAN PACKAGE
 
- -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 10 Jun 2007 16:13:14 +0200
+ -- Stefan Lippers-Hollmann <s.l-h@gmx.de>  Sun, 07 Oct 2007 03:54:56 +0200
 
 hwsetup-ng (0.2.12) unstable; urgency=low
 
